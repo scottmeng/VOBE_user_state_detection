@@ -59,7 +59,7 @@ x64-Release/main.d x64-Release/main.o: main.cpp ../../Include/XnOpenNI.h \
  ../../Include/XnPrdNode.h ../../Include/XnEnumerationErrors.h \
  ../../Include/XnVersion.h ../../Include/XnCodecIDs.h \
  ../../Include/XnCppWrapper.h SceneDrawer.h ../../Include/XnPropNames.h \
- /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
+ PostureChecker.h /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h
@@ -247,6 +247,8 @@ x64-Release/main.d x64-Release/main.o: main.cpp ../../Include/XnOpenNI.h \
 SceneDrawer.h:
 
 ../../Include/XnPropNames.h:
+
+PostureChecker.h:
 
 /usr/include/GL/glut.h:
 

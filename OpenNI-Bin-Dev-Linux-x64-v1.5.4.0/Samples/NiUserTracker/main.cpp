@@ -27,6 +27,7 @@
 #include <XnCppWrapper.h>
 #include "SceneDrawer.h"
 #include <XnPropNames.h>
+#include "PostureChecker.h"
 
 //---------------------------------------------------------------------------
 // Globals
