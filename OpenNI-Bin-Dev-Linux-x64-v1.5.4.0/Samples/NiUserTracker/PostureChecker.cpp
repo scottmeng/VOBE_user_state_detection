@@ -34,16 +34,6 @@ float DrawLimb(XnUserID player, XnSkeletonJoint eJoint1, XnSkeletonJoint eJoint2
 
 	g_DepthGenerator.ConvertRealWorldToProjective(2, pt, pt);
 
-#ifndef USE_GLES
-	glVertex3i(pt[0].X, pt[0].Y, 0);
-	glVertex3i(pt[1].X, pt[1].Y, 0);
-#else
-	GLfloat verts[4] = {pt[0].X, pt[0].Y, pt[1].X, pt[1].Y};
-	glVertexPointer(2, GL_FLOAT, 0, verts);
-	glDrawArrays(GL_LINES, 0, 2);
-	glFlush();
-#endif
-
 	return true;
 }
 
@@ -51,6 +41,7 @@ float DrawLimb(XnUserID player, XnSkeletonJoint eJoint1, XnSkeletonJoint eJoint2
 float CalculateAngleInTriangle(XnPoint3D leftPoint, XnPoint3D midPoint, XnPoint3D rightPoint)
 {
 	float leftSide, midSide, rightSide;
+	double cosAngle;
 
 	leftSide = sqrt(pow(leftPoint.X - midPoint.X, 2.0) + 
 					pow(leftPoint.Y - midPoint.Y, 2.0) + 
@@ -64,7 +55,9 @@ float CalculateAngleInTriangle(XnPoint3D leftPoint, XnPoint3D midPoint, XnPoint3
 				   pow(leftPoint.Y - rightPoint.Y, 2.0) +
 				   pow(leftPoint.Z - rightPoint.Z, 2.0));
 
-	
+	cosAngle = (pow(leftSide, 2.0) + pow(rightSide, 2.0) - pow(midSide, 2.0))/(2 * leftSide * rightSide);
+
+	return acos(cosAngle)*57.3;	
 }
 
 void DrawJoint(XnUserID player, XnSkeletonJoint eJoint)
@@ -112,36 +105,7 @@ void CheckPosture(const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd)
 		// take down his/her joint positions
 		if (g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i]))
 		{
-			// Draw Joints
-			// Try to draw all joints
-			DrawJoint(aUsers[i], XN_SKEL_HEAD);
-			DrawJoint(aUsers[i], XN_SKEL_NECK);
-			DrawJoint(aUsers[i], XN_SKEL_TORSO);
-			DrawJoint(aUsers[i], XN_SKEL_WAIST);
-
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_COLLAR);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_SHOULDER);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_ELBOW);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_WRIST);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_HAND);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_FINGERTIP);
-
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_COLLAR);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_SHOULDER);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_ELBOW);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_WRIST);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_HAND);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_FINGERTIP);
-
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_HIP);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_KNEE);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_ANKLE);
-			DrawJoint(aUsers[i], XN_SKEL_LEFT_FOOT);
-
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_HIP);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_KNEE);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_ANKLE);
-			DrawJoint(aUsers[i], XN_SKEL_RIGHT_FOOT);
+			// check user posture
 		}
 	}
 }
