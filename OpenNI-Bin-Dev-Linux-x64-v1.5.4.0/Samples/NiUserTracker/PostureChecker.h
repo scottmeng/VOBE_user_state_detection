@@ -9,5 +9,11 @@ and calculates data regarding user's real-time posture
 #include <XnCppWrapper.h>
 
 void CheckPosture(const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd);
+float CalculateDistanceBetweenPoints(XnPoint3D leftPoint, XnPoint3D rightPoint);
+float CalculateJointAngle(XnUserID player, XnSkeletonJoint eJointLeft, XnSkeletonJoint eJointMid, XnSkeletonJoint eJointRight);
+float CalculateJointDistance(XnUserID player, XnSkeletonJoint eJointLeft, XnSkeletonJoint eJointRight);
+float CalculateAngleInTriangle(XnPoint3D leftPoint, XnPoint3D midPoint, XnPoint3D rightPoint);
+
+
 
 #endif

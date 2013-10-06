@@ -1,7 +1,6 @@
 #include <math.h>
 #include "PostureChecker.h"
 
-
 extern xn::UserGenerator g_UserGenerator;
 extern xn::DepthGenerator g_DepthGenerator;
 
@@ -14,7 +13,7 @@ float CalculateJointAngle(XnUserID player, XnSkeletonJoint eJointLeft,
 		return -1;
 	}
 
-	if (!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointLeft) ||
+	if (!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointLeft)||
 		!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointMid) ||
 		!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointRight))
 	{
@@ -22,9 +21,9 @@ float CalculateJointAngle(XnUserID player, XnSkeletonJoint eJointLeft,
 	}
 
 	XnSkeletonJointPosition jointLeft, jointMid, jointRight;
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointLeft, eJointLeft);
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointMid, eJointMid);
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointRight, eJointRight);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJointLeft, jointLeft);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJointMid, jointMid);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJointRight, jointRight);
 
 	if (jointLeft.fConfidence < 0.5 || jointMid.fConfidence < 0.5 || jointRight.fConfidence < 0.5)
 	{
@@ -48,16 +47,16 @@ float CalculateJointDistance(XnUserID player, XnSkeletonJoint eJointLeft, XnSkel
 		return -1;
 	}
 
-	XnSkeletonJointPosition jointleft, jointRight;
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointLeft, eJointLeft);
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointRight, eJointRight);
+	XnSkeletonJointPosition jointLeft, jointRight;
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJointLeft, jointLeft);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJointRight, jointRight);
 
-	if (jointleft.fConfidence < 0.5 || jointRight.fConfidence < 0.5)
+	if (jointLeft.fConfidence < 0.5 || jointRight.fConfidence < 0.5)
 	{
 		return -1;
 	}
 
-	return CalculateDistanceBetweenPoints(jointleft.position, jointRight.position);
+	return CalculateDistanceBetweenPoints(jointLeft.position, jointRight.position);
 }
 
 // calculate the angle in a provided triangle
@@ -89,7 +88,7 @@ float CalculateDistanceBetweenPoints(XnPoint3D leftPoint, XnPoint3D rightPoint)
 // calculate joint angles and etc.
 void CheckPosture(const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd)
 {
-	nUserID aUsers[2];
+	XnUserID aUsers[2];
 	XnUInt16 nUsers = 2;
 	g_UserGenerator.GetUsers(aUsers, nUsers);
 
@@ -102,4 +101,69 @@ void CheckPosture(const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd)
 			// check user posture
 		}
 	}
+}
+
+// calculate the angle formed by head and neck
+// with regard to the horizon
+float CalculateHeadNeckAngle(XnUserID player)
+{
+
+	if (!g_UserGenerator.GetSkeletonCap().IsTracking(player))
+	{
+		printf("not tracked!\n");
+		return -1;
+	}
+
+	if (!g_UserGenerator.GetSkeletonCap().IsJointActive(XN_SKEL_NECK) ||
+		!g_UserGenerator.GetSkeletonCap().IsJointActive(XN_SKEL_HEAD))
+	{
+		return -1;
+	}
+
+	XnSkeletonJointPosition posHead, posNeck;
+	
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_HEAD, posHead);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_NECK, posNeck);
+
+	double longSide = GetPointDistance(posHead.position, posNeck.position);
+
+	double shortSide = abs(posHead.position.Y - posNeck.position.Y);
+
+	double angle = asin(shortSide/longSide) * 57.3;
+
+	return angle;
+}
+
+void RecordAngle(XnUserID player, FILE *fp)
+{
+	XnBool current;
+	double angleHeadNeckTorse, angleHeadNeckLeftShoulder, angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee;
+
+	angleHeadNeckTorse = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_TORSO);
+	angleHeadNeckLeftShoulder = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_LEFT_SHOULDER);
+	angleHeadNeckRightShoulder = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_RIGHT_SHOULDER);
+	angleNeckHipLeftKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_LEFT_HIP, XN_SKEL_LEFT_KNEE);
+	angleNeckHipRightKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_RIGHT_HIP, XN_SKEL_RIGHT_KNEE);
+
+	double angleHeadNeck = GetHeadNeckAngle(player);
+
+	printf("%.2f\n", angleHeadNeck);
+
+	if(angleHeadNeck < 75 && !CheckUserForward(player))
+	{
+		current = true;
+	}
+	else
+	{
+		current = false;
+	}
+
+	CheckUserResting(player, current);
+	int count = CheckUserMoved(player);
+
+	char output[100] = "";
+	xnOSMemSet(output, 0, sizeof(output));
+	sprintf(output, "%.2f   %.2f   %.2f   %.2f   %.2f   %d\n", angleHeadNeckTorse, angleHeadNeckLeftShoulder, angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee, count);
+
+	fprintf(fp, output);
 }
