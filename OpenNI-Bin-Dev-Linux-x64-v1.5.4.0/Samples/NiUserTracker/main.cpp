@@ -73,6 +73,9 @@ XnBool g_bRecord = false;
 
 XnBool g_bQuit = false;
 
+// file pointer for output data
+FILE *fp;
+
 //---------------------------------------------------------------------------
 // Code
 //---------------------------------------------------------------------------
@@ -84,6 +87,9 @@ void CleanupExit()
 	g_UserGenerator.Release();
 	g_Player.Release();
 	g_Context.Release();
+
+	// close output file
+	fclose(fp);
 
 	exit (1);
 }
@@ -233,7 +239,7 @@ void glutDisplay (void)
 	g_DepthGenerator.GetMetaData(depthMD);
 	g_UserGenerator.GetUserPixels(0, sceneMD);
 	DrawDepthMap(depthMD, sceneMD);
-	CheckPosture(depthMD, sceneMD);
+	CheckPosture(depthMD, sceneMD, fp);
 
 #ifndef USE_GLES
 	glutSwapBuffers();
@@ -328,6 +334,13 @@ void glInit (int * pargc, char ** argv)
 
 int main(int argc, char **argv)
 {
+	fp = fopen("results.dat", "w");
+
+	if (fp == NULL) {
+		printf("File open is unsuccessful\n");
+		exit(0);
+	}
+
 	XnStatus nRetVal = XN_STATUS_OK;
 
 	if (argc > 1)

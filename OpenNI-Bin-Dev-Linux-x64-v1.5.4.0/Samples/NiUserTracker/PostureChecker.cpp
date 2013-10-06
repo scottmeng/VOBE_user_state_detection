@@ -1,5 +1,6 @@
 #include <math.h>
 #include "PostureChecker.h"
+#include <stdio.h>
 
 extern xn::UserGenerator g_UserGenerator;
 extern xn::DepthGenerator g_DepthGenerator;
@@ -86,7 +87,7 @@ float CalculateDistanceBetweenPoints(XnPoint3D leftPoint, XnPoint3D rightPoint)
 // track two users 
 // take down users' joint positions
 // calculate joint angles and etc.
-void CheckPosture(const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd)
+void CheckPosture(const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd, FILE *fp)
 {
 	XnUserID aUsers[2];
 	XnUInt16 nUsers = 2;
@@ -99,6 +100,7 @@ void CheckPosture(const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd)
 		if (g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i]))
 		{
 			// check user posture
+			RecordAngle(aUsers[i], fp);
 		}
 	}
 }
@@ -125,19 +127,17 @@ float CalculateHeadNeckAngle(XnUserID player)
 	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_HEAD, posHead);
 	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_NECK, posNeck);
 
-	double longSide = GetPointDistance(posHead.position, posNeck.position);
+	float longSide = CalculateDistanceBetweenPoints(posHead.position, posNeck.position);
 
-	double shortSide = abs(posHead.position.Y - posNeck.position.Y);
+	float shortSide = abs(posHead.position.Y - posNeck.position.Y);
 
-	double angle = asin(shortSide/longSide) * 57.3;
-
-	return angle;
+	return asin(shortSide/longSide) * 57.3;
 }
 
 void RecordAngle(XnUserID player, FILE *fp)
 {
 	XnBool current;
-	double angleHeadNeckTorse, angleHeadNeckLeftShoulder, angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee;
+	float angleHeadNeckTorse, angleHeadNeckLeftShoulder, angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee;
 
 	angleHeadNeckTorse = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_TORSO);
 	angleHeadNeckLeftShoulder = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_LEFT_SHOULDER);
@@ -145,25 +145,12 @@ void RecordAngle(XnUserID player, FILE *fp)
 	angleNeckHipLeftKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_LEFT_HIP, XN_SKEL_LEFT_KNEE);
 	angleNeckHipRightKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_RIGHT_HIP, XN_SKEL_RIGHT_KNEE);
 
-	double angleHeadNeck = GetHeadNeckAngle(player);
-
-	printf("%.2f\n", angleHeadNeck);
-
-	if(angleHeadNeck < 75 && !CheckUserForward(player))
-	{
-		current = true;
-	}
-	else
-	{
-		current = false;
-	}
-
-	CheckUserResting(player, current);
-	int count = CheckUserMoved(player);
+	float angleHeadNeck = CalculateHeadNeckAngle(player);
 
 	char output[100] = "";
 	xnOSMemSet(output, 0, sizeof(output));
-	sprintf(output, "%.2f   %.2f   %.2f   %.2f   %.2f   %d\n", angleHeadNeckTorse, angleHeadNeckLeftShoulder, angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee, count);
+	sprintf(output, "%.2f   %.2f   %.2f   %.2f   %.2f   %.2f\n", angleHeadNeckTorse, angleHeadNeckLeftShoulder, 
+		angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee, angleHeadNeck);
 
 	fprintf(fp, output);
 }
