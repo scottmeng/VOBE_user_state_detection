@@ -5,36 +5,59 @@
 extern xn::UserGenerator g_UserGenerator;
 extern xn::DepthGenerator g_DepthGenerator;
 
-float DrawLimb(XnUserID player, XnSkeletonJoint eJoint1, XnSkeletonJoint eJoint2)
+float CalculateJointAngle(XnUserID player, XnSkeletonJoint eJointLeft, 
+	XnSkeletonJoint eJointMid, XnSkeletonJoint eJointRight)
 {
 	if (!g_UserGenerator.GetSkeletonCap().IsTracking(player))
 	{
 		printf("not tracked!\n");
-		return true;
+		return -1;
 	}
 
-	if (!g_UserGenerator.GetSkeletonCap().IsJointActive(eJoint1) ||
-		!g_UserGenerator.GetSkeletonCap().IsJointActive(eJoint2))
+	if (!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointLeft) ||
+		!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointMid) ||
+		!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointRight))
 	{
-		return false;
+		return -1;
 	}
 
-	XnSkeletonJointPosition joint1, joint2;
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJoint1, joint1);
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJoint2, joint2);
+	XnSkeletonJointPosition jointLeft, jointMid, jointRight;
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointLeft, eJointLeft);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointMid, eJointMid);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointRight, eJointRight);
 
-	if (joint1.fConfidence < 0.5 || joint2.fConfidence < 0.5)
+	if (jointLeft.fConfidence < 0.5 || jointMid.fConfidence < 0.5 || jointRight.fConfidence < 0.5)
 	{
-		return true;
+		return -1;
 	}
 
-	XnPoint3D pt[2];
-	pt[0] = joint1.position;
-	pt[1] = joint2.position;
+	return CalculateAngleInTriangle(jointLeft.position, jointMid.position, jointRight.position);
+}
 
-	g_DepthGenerator.ConvertRealWorldToProjective(2, pt, pt);
+float CalculateJointDistance(XnUserID player, XnSkeletonJoint eJointLeft, XnSkeletonJoint eJointRight)
+{
+	if (!g_UserGenerator.GetSkeletonCap().IsTracking(player))
+	{
+		printf("not tracked!\n");
+		return -1;
+	}
 
-	return true;
+	if (!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointLeft) ||
+		!g_UserGenerator.GetSkeletonCap().IsJointActive(eJointRight))
+	{
+		return -1;
+	}
+
+	XnSkeletonJointPosition jointleft, jointRight;
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointLeft, eJointLeft);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, jointRight, eJointRight);
+
+	if (jointleft.fConfidence < 0.5 || jointRight.fConfidence < 0.5)
+	{
+		return -1;
+	}
+
+	return CalculateDistanceBetweenPoints(jointleft.position, jointRight.position);
 }
 
 // calculate the angle in a provided triangle
@@ -43,52 +66,23 @@ float CalculateAngleInTriangle(XnPoint3D leftPoint, XnPoint3D midPoint, XnPoint3
 	float leftSide, midSide, rightSide;
 	double cosAngle;
 
-	leftSide = sqrt(pow(leftPoint.X - midPoint.X, 2.0) + 
-					pow(leftPoint.Y - midPoint.Y, 2.0) + 
-					pow(leftPoint.Z - midPoint.Z, 2.0));
+	leftSide = CalculateDistanceBetweenPoints(leftPoint, midPoint);
+	
+	rightSide = CalculateDistanceBetweenPoints(rightPoint, midPoint);
 
-	rightSide = sqrt(pow(rightPoint.X - midPoint.X, 2.0) +
-					 pow(rightPoint.Y - midPoint.Y, 2.0) +
-					 pow(rightPoint.Z - midPoint.Z, 2.0));
-
-	midSide = sqrt(pow(leftPoint.X - rightPoint.X, 2.0) +
-				   pow(leftPoint.Y - rightPoint.Y, 2.0) +
-				   pow(leftPoint.Z - rightPoint.Z, 2.0));
-
+	midSide = CalculateDistanceBetweenPoints(leftPoint, rightPoint);
+	
 	cosAngle = (pow(leftSide, 2.0) + pow(rightSide, 2.0) - pow(midSide, 2.0))/(2 * leftSide * rightSide);
 
 	return acos(cosAngle)*57.3;	
 }
 
-void DrawJoint(XnUserID player, XnSkeletonJoint eJoint)
+float CalculateDistanceBetweenPoints(XnPoint3D leftPoint, XnPoint3D rightPoint)
 {
-	if (!g_UserGenerator.GetSkeletonCap().IsTracking(player))
-	{
-		printf("not tracked!\n");
-		return;
-	}
-
-	if (!g_UserGenerator.GetSkeletonCap().IsJointActive(eJoint))
-	{
-		return;
-	}
-
-	XnSkeletonJointPosition joint;
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJoint, joint);
-
-	if (joint.fConfidence < 0.5)
-	{
-		return;
-	}
-
-	XnPoint3D pt;
-	pt = joint.position;
-
-	g_DepthGenerator.ConvertRealWorldToProjective(1, &pt, &pt);
-
-	drawCircle(pt.X, pt.Y, 2);
+	return sqrt(pow(leftPoint.X - rightPoint.X, 2.0) +
+			    pow(leftPoint.Y - rightPoint.Y, 2.0) +
+			    pow(leftPoint.Z - rightPoint.Z, 2.0));
 }
-
 
 // track two users 
 // take down users' joint positions
