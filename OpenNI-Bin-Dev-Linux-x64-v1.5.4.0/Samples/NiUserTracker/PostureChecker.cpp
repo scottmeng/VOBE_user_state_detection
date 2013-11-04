@@ -135,6 +135,7 @@ float CalculateHeadNeckAngle(XnUserID player)
 	return asin(shortSide/longSide) * 57.3;
 }
 
+// record 8 joint angles and one head-neck orientation
 void RecordAngle(XnUserID player, FILE *fp)
 {
 	XnBool current;
