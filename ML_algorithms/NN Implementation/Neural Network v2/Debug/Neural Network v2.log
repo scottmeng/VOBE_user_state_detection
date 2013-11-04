@@ -1,0 +1,41 @@
+﻿Build started 3/11/2013 5:41:38 PM.
+     1>Project "C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2\Neural Network v2.vcxproj" on node 2 (build target(s)).
+     1>PrepareForBuild:
+         Creating directory "C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Debug\".
+       InitializeBuildStatus:
+         Creating "Debug\Neural Network v2.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt dataReader.cpp main.cpp neuralNetwork.cpp neuralNetworkTrainer.cpp
+         neuralNetworkTrainer.cpp
+         neuralNetwork.cpp
+     1>c:\users\scott\dropbox\dcc 2011 for anna, kok ann and scott\fyp (sem 7 ay1314)\intelligent environment\week11\nn implementation\neural network v2\neuralnetwork.cpp(97): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>c:\users\scott\dropbox\dcc 2011 for anna, kok ann and scott\fyp (sem 7 ay1314)\intelligent environment\week11\nn implementation\neural network v2\neuralnetwork.cpp(101): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(197) : see declaration of 'strtok'
+     1>c:\users\scott\dropbox\dcc 2011 for anna, kok ann and scott\fyp (sem 7 ay1314)\intelligent environment\week11\nn implementation\neural network v2\neuralnetwork.cpp(108): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(197) : see declaration of 'strtok'
+         main.cpp
+         dataReader.cpp
+     1>c:\users\scott\dropbox\dcc 2011 for anna, kok ann and scott\fyp (sem 7 ay1314)\intelligent environment\week11\nn implementation\neural network v2\datareader.cpp(93): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>c:\users\scott\dropbox\dcc 2011 for anna, kok ann and scott\fyp (sem 7 ay1314)\intelligent environment\week11\nn implementation\neural network v2\datareader.cpp(97): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(197) : see declaration of 'strtok'
+     1>c:\users\scott\dropbox\dcc 2011 for anna, kok ann and scott\fyp (sem 7 ay1314)\intelligent environment\week11\nn implementation\neural network v2\datareader.cpp(105): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(197) : see declaration of 'strtok'
+         Generating Code...
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Debug\Neural Network v2.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Neural Network v2.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Debug\Neural Network v2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Debug\Neural Network v2.lib" /MACHINE:X86 Debug\dataReader.obj
+         Debug\main.obj
+         Debug\neuralNetwork.obj
+         Debug\neuralNetworkTrainer.obj
+         Neural Network v2.vcxproj -> C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Debug\Neural Network v2.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Debug\Neural Network v2.exe;#1" /manifest "Debug\Neural Network v2.exe.intermediate.manifest"
+       FinalizeBuildStatus:
+         Deleting file "Debug\Neural Network v2.unsuccessfulbuild".
+         Touching "Debug\Neural Network v2.lastbuildstate".
+     1>Done Building Project "C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2\Neural Network v2.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.60

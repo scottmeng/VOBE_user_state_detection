@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Neural Network v2">
+</Property><Property Name="Solution File" Value="C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2.sln">
+</Property><Property Name="User Options File" Value="C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2.suo">
+</Property><Property Name="Date" Value="Sunday, 3 November 2013">
+</Property><Property Name="Time" Value="3:12 AM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Neural Network v2.sln" Description="File successfully backed up as C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="Neural Network v2.suo" Description="File successfully backed up as C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2.suo.old">
+</Event><Event ErrorLevel="0" Project="Neural Network v2" Source="Neural Network v2\Neural Network v2.vcproj" Description="Converting project file 'C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2\Neural Network v2.vcproj'.">
+</Event><Event ErrorLevel="1" Project="Neural Network v2" Source="Neural Network v2\Neural Network v2.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="0" Project="Neural Network v2" Source="Neural Network v2\Neural Network v2.vcproj" Description="Done converting to new project file 'C:\Users\Scott\Dropbox\DCC 2011 for Anna, Kok Ann and Scott\FYP (Sem 7 AY1314)\Intelligent environment\Week11\NN Implementation\Neural Network v2\Neural Network v2.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="Neural Network v2" Source="Neural Network v2\Neural Network v2.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="Neural Network v2.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Neural Network v2.sln" Description="Converted">
+</Event></UpgradeLog>
