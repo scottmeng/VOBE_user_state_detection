@@ -77,6 +77,7 @@ float CalculateAngleInTriangle(XnPoint3D leftPoint, XnPoint3D midPoint, XnPoint3
 	return acos(cosAngle)*57.3;	
 }
 
+// calculate the distance given two points in 3D space
 float CalculateDistanceBetweenPoints(XnPoint3D leftPoint, XnPoint3D rightPoint)
 {
 	return sqrt(pow(leftPoint.X - rightPoint.X, 2.0) +
@@ -137,20 +138,30 @@ float CalculateHeadNeckAngle(XnUserID player)
 void RecordAngle(XnUserID player, FILE *fp)
 {
 	XnBool current;
-	float angleHeadNeckTorse, angleHeadNeckLeftShoulder, angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee;
+	float angleHeadNeckTorse, 
+		  angleHeadNeckLeftShoulder, 
+		  angleHeadNeckRightShoulder, 
+		  angleNeckHipLeftKnee, 
+		  angleNeckHipRightKnee,
+		  angleNeckLeftShoulderLeftArm,
+		  angleNeckRightShoulderRightArm;
 
 	angleHeadNeckTorse = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_TORSO);
 	angleHeadNeckLeftShoulder = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_LEFT_SHOULDER);
 	angleHeadNeckRightShoulder = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_RIGHT_SHOULDER);
 	angleNeckHipLeftKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_LEFT_HIP, XN_SKEL_LEFT_KNEE);
 	angleNeckHipRightKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_RIGHT_HIP, XN_SKEL_RIGHT_KNEE);
+	angleNeckLeftShoulderLeftArm = CalculateHeadNeckAngle(player, XN_SKEL_NECK, XN_SKEL_LEFT_SHOULDER, XN_SKEL_LEFT_ELBOW);
+	angleNeckRightShoulderRightArm = CalculateHeadNeckAngle(player, XN_SKEL_NECK, XN_SKEL_RIGHT_SHOULDER, XN_SKEL_RIGHT_ELBOW);
+
 
 	float angleHeadNeck = CalculateHeadNeckAngle(player);
 
 	char output[100] = "";
 	xnOSMemSet(output, 0, sizeof(output));
-	sprintf(output, "%.2f   %.2f   %.2f   %.2f   %.2f   %.2f\n", angleHeadNeckTorse, angleHeadNeckLeftShoulder, 
-		angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee, angleHeadNeck);
+	sprintf(output, "%.2f	%.2f	%.2f	%.2f	%.2f	%.2f	%.2f	%.2f\n", angleHeadNeckTorse, angleHeadNeckLeftShoulder, 
+		angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee,, angleNeckLeftShoulderLeftArm, 
+		angleNeckRightShoulderRightArm, angleHeadNeck);
 
 	fprintf(fp, output);
 }
