@@ -14,7 +14,10 @@ int main(int argc, char **argv){
 		return -1;
 	}
 	
+	// number of classes
 	int nclasses = atoi(argv[1]);
+
+	// number of iterations
 	int niteration = atoi(argv[2]);
 
 	if(!nclasses){
@@ -29,6 +32,7 @@ int main(int argc, char **argv){
 		return -1;
 	}
 
+	// buffer with 80 char space to read file
 	char buffer[80];
 	while(fgets(buffer, sizeof(buffer), file)){
 		V2 p;

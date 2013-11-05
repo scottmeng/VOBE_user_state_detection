@@ -406,7 +406,7 @@ inline M inv(M o){
 //  cerr << "after final phase.\no=" << o << "i=" << i;
 
   if((orig*i-M::eye(i.w)).sum() > 1e-5){
-    fprintf(stderr, "MATRIX INVERSION FAILED.\n");
+    //fprintf(stderr, "MATRIX INVERSION FAILED.\n");
     cerr << "orig=" << orig << "\n";
     cerr << "out=" << i << "\n";
 
