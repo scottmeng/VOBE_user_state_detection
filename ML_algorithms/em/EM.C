@@ -43,12 +43,15 @@ int main(int argc, char **argv){
 			fprintf(stderr, "sscanf returned %d on '%s'\n", buffer);
 		}
 	}
+
+	// load data successful
 	fprintf(stderr, "loaded %d datums\n", data.size());
 
 	fclose(file);
 
 	vector<M23> classes(nclasses);
 
+	// create random seeds based on the number of classes
 	for(unsigned int cls=0; cls<classes.size(); ++cls){
 		classes[cls].a = 5*(rand()/(double)RAND_MAX);
 		classes[cls].b = 0;
