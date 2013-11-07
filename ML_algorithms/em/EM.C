@@ -110,6 +110,9 @@ int main(int argc, char **argv){
 		// compute mean, covariance statistics for each class
 
 		for(unsigned int cls = 0; cls < classes.size(); ++cls){
+			
+			// compute the mean value of that class with regard
+			// to probability weight of every datum
 			V2 mean;
 			double q = 0;
 			for(unsigned int inst = 0; inst < data.size(); ++inst){
