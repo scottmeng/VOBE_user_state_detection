@@ -62,12 +62,14 @@ int main(){
 					   &skl.sixth_angle,
 					   &dummy);
 		if(r == 7){
-			printf("successful in scanning data");
+			printf("successful in scanning data\n");
 			skeletons.push_back(skl);
 		}else{
 			printf("sscanf returned %d on '%s'\n", buffer);
 		}
 	}
+
+	fclose(file);
 
 	// create 2 randome starting seeds
 	cat1.first_angle = 180*(rand()/(double)RAND_MAX);
@@ -91,30 +93,83 @@ int main(){
 		differences.push_back(vector<double>(2));
 	}
 
-	double aveFirst1, aveSecond1, aveThird1, aveFourth1, aveFifth1, aveSixth1,
-		   aveFirst2, aveSecond2, aveThird2, aveFourth2, aveFifth2. aveSixth2;
+	// counting the number of datums being classified to each categories
+	int numOfCat1, numOfCat2;
+
+	int numOfIterations = 0;
 
 	// loop
 	while(1) {
+		numOfCat1 = 0;
+		numOfCat2 = 0;
+
 		// classify all datum based on current centre points
 		for(int i = 0; i < skeletons.size(); i++) {
 			if(cal_Distance(skeletons[i], cat1) > cal_Distance(skeletons[i], cat2)) {
 				skeletons[i].cluster = 2;
+				numOfCat2 += 1;
 			} else {
 				skeletons[i].cluster = 1;
+				numOfCat1 += 1;
 			}
 		}
+
+		// clear average values
+		cat1.first_angle = 0;
+		cat1.second_angle = 0;
+		cat1.third_angle = 0;
+		cat1.fourth_angle = 0;
+		cat1.fifth_angle = 0;
+		cat1.sixth_angle = 0;
+
+		cat2.first_angle = 0;
+		cat2.second_angle = 0;
+		cat2.third_angle = 0;
+		cat2.fourth_angle = 0;
+		cat2.fifth_angle = 0;
+		cat2.sixth_angle = 0;
 
 		// using new classification to update centre points
 		for(int i = 0; i < skeletons.size(); i++) {
 			if(skeletons[i].cluster == 1) {
-				
+				cat1.first_angle += skeletons[i].first_angle / numOfCat1;
+				cat1.second_angle += skeletons[i].second_angle / numOfCat1;
+				cat1.third_angle += skeletons[i].third_angle / numOfCat1;
+				cat1.fourth_angle += skeletons[i].fourth_angle / numOfCat1;
+				cat1.fifth_angle += skeletons[i].fifth_angle / numOfCat1;
+				cat1.sixth_angle += skeletons[i].sixth_angle / numOfCat1;
 			} else {
-				
+				cat2.first_angle += skeletons[i].first_angle / numOfCat2;
+				cat2.second_angle += skeletons[i].second_angle / numOfCat2;
+				cat2.third_angle += skeletons[i].third_angle / numOfCat2;
+				cat2.fourth_angle += skeletons[i].fourth_angle / numOfCat2;
+				cat2.fifth_angle += skeletons[i].fifth_angle / numOfCat2;
+				cat1.sixth_angle += skeletons[i].sixth_angle / numOfCat2;
 			}
+		}
+
+		numOfIterations += 1;
+
+		if(numOfIterations == 300) {
+			break;
 		}
 	}	
 
+	file = fopen("clustered.data", "w");
 
+	for(int i = 0; i < skeletons.size(); i++) {
+		fprintf(file, "%.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %d \n", 
+				skeletons[i].first_angle, skeletons[i].second_angle, skeletons[i].third_angle,
+				skeletons[i].fourth_angle, skeletons[i].fifth_angle, skeletons[i].sixth_angle,
+				skeletons[i].cluster);
+	}
+
+	fclose(file);
+
+	printf("k means learning process has successfully completed.\n");
+
+	printf("cat1 is: %lf %lf %lf %lf %lf %lf \n", 
+			cat1.first_angle, cat1.second_angle, cat1.third_angle,
+			cat1.fourth_angle, cat1.fifth_angle, cat1.sixth_angle);
 	return 1;
 }
