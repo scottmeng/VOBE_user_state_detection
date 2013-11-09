@@ -152,16 +152,18 @@ void RecordAngle(XnUserID player, FILE *fp)
 	angleHeadNeckRightShoulder = CalculateJointAngle(player, XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_RIGHT_SHOULDER);
 	angleNeckHipLeftKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_LEFT_HIP, XN_SKEL_LEFT_KNEE);
 	angleNeckHipRightKnee = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_RIGHT_HIP, XN_SKEL_RIGHT_KNEE);
-	angleNeckLeftShoulderLeftArm = CalculateHeadNeckAngle(player, XN_SKEL_NECK, XN_SKEL_LEFT_SHOULDER, XN_SKEL_LEFT_ELBOW);
-	angleNeckRightShoulderRightArm = CalculateHeadNeckAngle(player, XN_SKEL_NECK, XN_SKEL_RIGHT_SHOULDER, XN_SKEL_RIGHT_ELBOW);
+	angleNeckLeftShoulderLeftArm = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_LEFT_SHOULDER, XN_SKEL_LEFT_ELBOW);
+	angleNeckRightShoulderRightArm = CalculateJointAngle(player, XN_SKEL_NECK, XN_SKEL_RIGHT_SHOULDER, XN_SKEL_RIGHT_ELBOW);
 
 
 	float angleHeadNeck = CalculateHeadNeckAngle(player);
 
 	char output[100] = "";
 	xnOSMemSet(output, 0, sizeof(output));
-	sprintf(output, "%.2f	%.2f	%.2f	%.2f	%.2f	%.2f	%.2f	%.2f\n", angleHeadNeckTorse, angleHeadNeckLeftShoulder, 
-		angleHeadNeckRightShoulder, angleNeckHipLeftKnee, angleNeckHipRightKnee,, angleNeckLeftShoulderLeftArm, 
+	sprintf(output, "%.2f	%.2f	%.2f	%.2f	%.2f	%.2f	%.2f	%.2f\n", 
+		angleHeadNeckTorse, angleHeadNeckLeftShoulder, 
+		angleHeadNeckRightShoulder, angleNeckHipLeftKnee, 
+		angleNeckHipRightKnee, angleNeckLeftShoulderLeftArm, 
 		angleNeckRightShoulderRightArm, angleHeadNeck);
 
 	fprintf(fp, output);
