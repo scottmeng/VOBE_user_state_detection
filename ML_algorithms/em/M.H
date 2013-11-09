@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
-#include <GL/gl.h>
+#include <OpenGL/gl.h>
 using namespace std;
 
 class M {
@@ -215,6 +215,8 @@ typedef M V;
 
 class V2 {
  public:
+  // reserve the same amount of memory space for 
+  // two different variable types to access 
   union {
     double d[2];
     struct {
