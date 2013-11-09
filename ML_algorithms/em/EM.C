@@ -61,6 +61,7 @@ int main(int argc, char **argv){
 		classes[cls].f = 30*(rand()/(double)RAND_MAX);
 	}
 
+	// for every datum, assign an array of probabilities for every classification
 	vector<vector<double> > prob_cls;
 	for(unsigned int i=0; i<data.size(); ++i){
 		prob_cls.push_back(vector<double>(classes.size()));
@@ -73,6 +74,8 @@ int main(int argc, char **argv){
 		// compute probability of each datum being in each class
 		for(unsigned int cls = 0; cls < classes.size(); ++cls){
 			V2 mean = classes[cls].zv();
+
+			// 2 by 2 matrix
 			M cov(2,2);
 			cov(0,0) = classes[cls].a;
 			cov(0,1) = classes[cls].b;
@@ -91,6 +94,7 @@ int main(int argc, char **argv){
 			}
 		}
 
+		// calculate weighted probabilities for each datrum
 		for(unsigned int inst = 0; inst < data.size(); ++inst){
 			double s = 0;
 			int b;
@@ -157,7 +161,7 @@ int main(int argc, char **argv){
 		printf(" '%s',", buffer);
 	}
 	
-
+	// 
 	for(unsigned int inst = 0; inst < data.size(); ++inst){
 		double s = 0;
 		int b;
